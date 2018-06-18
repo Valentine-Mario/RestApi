@@ -3,8 +3,8 @@ var fs= require('fs')
 var body_paser = require('body-parser');
 var app= express();
 var port = 3000
-app.use(body_paser.json() )
-class books{
+app.use(body_paser.json() )//middle ware that allows me to use body parser in this program
+class books{//This class helps build your book library
     constructor(name, title, author){
         this.name=name;
         this.title=title;
@@ -13,18 +13,18 @@ class books{
     }
 }
 
-class library{
+class library{// this is the class that contains parameters and methods that my work is based on
     constructor(name){
         this.name=name
         this.books=[]; //fs.readFileSync('./data.json', 'utf-8')
         this.borrow=[];
     }
-    addBook(book){
+    addBook(book){//this allows you to add book to your main library
         this.books=this.getLibrary();
         this.books.push(book)
-       var book= fs.writeFileSync('./data.json', JSON.stringify(this.books, null, 2));
+       var book= fs.writeFileSync('./data.json', JSON.stringify(this.books, null, 2));//this writes the data into a JSON file and format it appropriately
     }
-    getBook(){
+    getBook(){//this gets all the book in your main library
         this.books= this.getLibrary();
         return this.books;
     }
@@ -35,14 +35,14 @@ class library{
         fs.writeFileSync('./data.json', JSON.stringify(this.books, null, 2))
 
     }
-    borrowBook(value){
-        var bookItem=this.getBookByParam(value);
+    borrowBook(value){//this allows you to borrow a book to your personal library
+        var bookItem=this.getBookByParam(value);//this allows you to get the book by any parameter
         this.borrow.push(bookItem);
         fs.writeFileSync('./borrow.json', JSON.stringify(this.borrow, null, 2));
         var data = this.getBookByParam(value)
-        this.deleteBook(data)
+        this.deleteBook(data)//this deletes the book after it has been gotten from the main library
     }
-     getBookByParam2(value){
+     getBookByParam2(value){//this allows you to get the book out of your personal library with any parameter passed
 this.books = this.getBorrow();
     var books = [];
     for (let i = 0; i < this.books.length; i++){
@@ -58,7 +58,7 @@ deleteBook2(id){
        this.borrow.splice(bookIndex, 1)
        this.UpdateBorrow(this.borrow);
      }
-    returnBook(data){
+    returnBook(data){//this returns book after it has been borrowed
        var Item= this.getBookByParam2(data)
        this.addBook(Item)
        this.deleteBook2(Item)
@@ -69,7 +69,7 @@ deleteBook2(id){
     getBorrow(){
         return JSON.parse(fs.readFileSync('./borrow.json', 'utf-8'));
     }
-    getBookById(id){
+    getBookById(id){//this gets the book by the ID number
         this.books = this.getLibrary();
     for (var i = 0; i < this.books.length; i++){
         if(this.books[i].id == id){
@@ -77,7 +77,7 @@ deleteBook2(id){
             }
     }
 }
-    getBookByParam(value){
+    getBookByParam(value){//this gets the book by any parameter
 this.books = this.getLibrary();
     var books = [];
     for (let i = 0; i < this.books.length; i++){
@@ -88,12 +88,12 @@ this.books = this.getLibrary();
     }
     return books;    
 }
-    deleteBook(id){
+    deleteBook(id){//this delets book
        var bookIndex=this.getBookById(id);
        this.books.splice(bookIndex, 1)
        this.updateLibrary(this.books);
      }
-    editBook(id, newVal){
+    editBook(id, newVal){//this edits a book
         var bookIndex=this.getBookById(id);
         this.books[bookIndex]= newVal;
         this.updateLibrary(this.books);
